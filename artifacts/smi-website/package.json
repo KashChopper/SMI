@@ -1,0 +1,31 @@
+{
+  "name": "@workspace/smi-website",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port $PORT --hostname 0.0.0.0",
+    "build": "next build",
+    "start": "next start --port $PORT --hostname 0.0.0.0",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "15.3.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@mui/material": "^6.4.0",
+    "@mui/icons-material": "^6.4.0",
+    "@mui/x-data-grid": "^7.28.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@emotion/cache": "^11.14.0",
+    "firebase": "^11.6.0",
+    "recharts": "^2.15.2",
+    "date-fns": "^3.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "~5.9.2"
+  }
+}
