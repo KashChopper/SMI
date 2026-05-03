@@ -45,12 +45,19 @@ export default function LoginPage() {
       router.push('/dashboard');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Login failed';
+      console.error('Login error:', msg);
       if (msg.includes('invalid-credential') || msg.includes('wrong-password') || msg.includes('user-not-found')) {
         setError('Invalid email or password. Please try again.');
       } else if (msg.includes('too-many-requests')) {
         setError('Too many failed attempts. Please try again later.');
+      } else if (msg.includes('operation-not-allowed')) {
+        setError('Email/Password sign-in is not enabled. Please enable it in Firebase Console → Authentication → Sign-in methods.');
+      } else if (msg.includes('network-request-failed')) {
+        setError('Network error. Please check your internet connection.');
+      } else if (msg.includes('api-key-not-valid') || msg.includes('invalid-api-key')) {
+        setError('Invalid Firebase API key. Please check your .env.local configuration.');
       } else {
-        setError('Login failed. Please check your Firebase configuration.');
+        setError(`Login failed: ${msg}`);
       }
     } finally {
       setLoading(false);

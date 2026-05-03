@@ -80,7 +80,10 @@ export default function StudentsPage() {
       const q = query(collection(db, 'students'), orderBy('name'));
       const snap = await getDocs(q);
       setStudents(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Student)));
-    } catch { setStudents([]); }
+    } catch (err) {
+      console.error('Fetch error:', err);
+      setStudents([]);
+    }
     setLoading(false);
   };
 
@@ -102,7 +105,17 @@ export default function StudentsPage() {
       }
       setDialogOpen(false);
       fetchStudents();
-    } catch { setError('Failed to save. Check Firebase configuration.'); }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('Save error:', msg);
+      if (msg.includes('permission-denied') || msg.includes('PERMISSION_DENIED')) {
+        setError('Permission denied. Update your Firestore security rules to allow authenticated users.');
+      } else if (msg.includes('unauthenticated') || msg.includes('UNAUTHENTICATED')) {
+        setError('You must be logged in to save data.');
+      } else {
+        setError(`Failed to save: ${msg}`);
+      }
+    }
     setSaving(false);
   };
 
@@ -112,7 +125,9 @@ export default function StudentsPage() {
       await deleteDoc(doc(db, 'students', editingStudent.id));
       setDeleteDialogOpen(false);
       fetchStudents();
-    } catch { /* ignore */ }
+    } catch (err) {
+      console.error('Delete error:', err);
+    }
   };
 
   const filtered = students.filter((s) =>
